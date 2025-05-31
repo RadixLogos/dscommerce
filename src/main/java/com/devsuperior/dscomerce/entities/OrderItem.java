@@ -13,25 +13,25 @@ public class OrderItem implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
-	private PkOrderItem id;
+	private OrderItemPk id = new OrderItemPk();
 	private Integer quantiy;
 	private Double price;
 
 	public OrderItem() {
 	}
 
-	public OrderItem(Long orderId, Long ProductId, Integer quantiy, Double price) {
-		id.setOrderId(orderId);
-		id.setProductId(ProductId);
+	public OrderItem(Order order, Product product, Integer quantiy, Double price) {
+		id.setOrder(order);
+		id.setProduct(product);
 		this.quantiy = quantiy;
 		this.price = price;
 	}
 
-	public PkOrderItem getId() {
+	public OrderItemPk getId() {
 		return id;
 	}
 
-	public void setId(PkOrderItem id) {
+	public void setId(OrderItemPk id) {
 		this.id = id;
 	}
 
@@ -51,6 +51,21 @@ public class OrderItem implements Serializable{
 		this.price = price;
 	}
 
+	public Order getOrder() {
+		return id.getOrder();
+	}
+	
+	public void setOrder(Order order) {
+		id.setOrder(order);
+	}
+	
+	public Product getProduct() {
+		return id.getProduct();
+	}
+	
+	public void setProduct(Product product) {
+		id.setProduct(product);
+	}
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);

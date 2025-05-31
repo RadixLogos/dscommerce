@@ -24,13 +24,13 @@ public class Category implements Serializable{
 	@ManyToMany(mappedBy = "categories")
 	private Set<Product> products = new HashSet<>();
 	public Category() {
-		super();
+
 	}
 
-	public Category(Long id, String name, Set<Product> products) {
+	public Category(Long id, String name) {
 		this.id = id;
 		this.name = name;
-		this.products = products;
+
 	}
 
 	public Long getId() {
