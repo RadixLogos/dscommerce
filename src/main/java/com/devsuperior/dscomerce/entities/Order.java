@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import com.devsuperior.dscomerce.enums.OrderStatus;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,7 +30,7 @@ public class Order implements Serializable{
 	@ManyToOne
 	@JoinColumn(name = "client_id", referencedColumnName = "id")
 	private User client;
-	@OneToOne
+	@OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
 	private Payment payment;
 
 	public Order() {

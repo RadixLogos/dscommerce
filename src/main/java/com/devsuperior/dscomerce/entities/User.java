@@ -37,16 +37,13 @@ public class User implements Serializable{
 	public User() {
 	}
 
-	public User(Long id, String name, String email, String phone, LocalDate birthDate, String password, String[] roles,
-			Set<Order> orders) {
+	public User(Long id, String name, String email, String phone, LocalDate birthDate, String password) {
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.phone = phone;
 		this.birthDate = birthDate;
 		this.password = password;
-		this.roles = roles;
-		this.orders = orders;
 	}
 
 	public Long getId() {
@@ -99,15 +96,6 @@ public class User implements Serializable{
 
 	public String[] getRoles() {
 		return roles;
-	}
-
-	public void setRoles(String[] roles) {
-		this.roles = roles;
-	}
-
-
-	public Set<Order> getOrders() {
-		return orders;
 	}
 
 	public void setOrders(Set<Order> orders) {

@@ -37,13 +37,12 @@ public class Product implements Serializable{
 	public Product() {
 
 	}
-	public Product(Long id, String name, String description, Double price, String imgUrl, Set<Category> categories) {
+	public Product(Long id, String name, String description, Double price, String imgUrl) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.price = price;
 		this.imgUrl = imgUrl;
-		this.categories.addAll(categories);
 	}
 
 	public Long getId() {
@@ -86,7 +85,10 @@ public class Product implements Serializable{
 		this.imgUrl = imgUrl;
 	}
 
-
+	
+	public Set<Category> getCategories() {
+		return categories;
+	}
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
