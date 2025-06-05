@@ -1,6 +1,8 @@
 package com.devsuperior.dscomerce.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,10 +13,15 @@ import com.devsuperior.dscomerce.repositories.ProductRepository;
 public class ProductService {
 	@Autowired
 	private ProductRepository productRepository;
+
 	
 	@Transactional(readOnly = true)
 	public ProductDTO findProductById(Long id) {
-		return ProductDTO.fromProduct(productRepository.findById(id).get());
+		return ProductDTO.fromProduct(productRepository.findById(id).get()); 
 	}
 
+	@Transactional(readOnly = true)
+	public Page<ProductDTO> findAllProducts(Pageable pageble){
+		return productRepository.findAll(pageble).map(x -> ProductDTO.fromProduct(x));
+	}
 }
