@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.devsuperior.dscomerce.dto.ProductDTO;
 import com.devsuperior.dscomerce.entities.Product;
 import com.devsuperior.dscomerce.repositories.ProductRepository;
+import com.devsuperior.dscomerce.services.exceptions.ResourceNotFoundException;
 
 @Service
 public class ProductService {
@@ -18,7 +19,9 @@ public class ProductService {
 	
 	@Transactional(readOnly = true)
 	public ProductDTO findProductById(Long id) {
-		return ProductDTO.fromProduct(productRepository.findById(id).get()); 
+		var dto =ProductDTO.fromProduct(productRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Recurso não encontrado!"))); 
+		return dto;
 	}
 
 	@Transactional(readOnly = true)
