@@ -1,4 +1,4 @@
-package com.devsuperior.dscomerce.entities;
+package com.devsuperior.dscommerce.entities;
 
 import java.util.Objects;
 

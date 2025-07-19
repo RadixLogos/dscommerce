@@ -1,4 +1,4 @@
-package com.devsuperior.dscomerce.controllers.handlers;
+package com.devsuperior.dscommerce.controllers.handlers;
 
 import java.time.Instant;
 
@@ -9,10 +9,10 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.devsuperior.dscomerce.dto.CustomError;
-import com.devsuperior.dscomerce.dto.ValidationError;
-import com.devsuperior.dscomerce.services.exceptions.DatabaseException;
-import com.devsuperior.dscomerce.services.exceptions.ResourceNotFoundException;
+import com.devsuperior.dscommerce.dto.CustomError;
+import com.devsuperior.dscommerce.dto.ValidationError;
+import com.devsuperior.dscommerce.services.exceptions.DatabaseException;
+import com.devsuperior.dscommerce.services.exceptions.ResourceNotFoundException;
 
 import jakarta.servlet.http.HttpServletRequest;
 

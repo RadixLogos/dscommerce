@@ -1,4 +1,4 @@
-package com.devsuperior.dscomerce.services;
+package com.devsuperior.dscommerce.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -8,13 +8,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.devsuperior.dscomerce.dto.ProductDTO;
-import com.devsuperior.dscomerce.entities.Product;
-import com.devsuperior.dscomerce.repositories.ProductRepository;
-import com.devsuperior.dscomerce.services.exceptions.DatabaseException;
-import com.devsuperior.dscomerce.services.exceptions.ResourceNotFoundException;
+import com.devsuperior.dscommerce.dto.ProductDTO;
+import com.devsuperior.dscommerce.entities.Product;
+import com.devsuperior.dscommerce.repositories.ProductRepository;
+import com.devsuperior.dscommerce.services.exceptions.DatabaseException;
+import com.devsuperior.dscommerce.services.exceptions.ResourceNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
+
+import java.util.List;
 
 @Service
 public class ProductService {
@@ -30,8 +32,8 @@ public class ProductService {
 	}
 
 	@Transactional(readOnly = true)
-	public Page<ProductDTO> findAllProducts(Pageable pageble){
-		return productRepository.findAll(pageble).map(x -> ProductDTO.fromProduct(x));
+	public Page<ProductDTO> findProductByName(String name, Pageable pageable) {
+		return productRepository.findByName(name,pageable).map(ProductDTO::fromProduct);
 	}
 	
 	@Transactional
@@ -73,5 +75,5 @@ public class ProductService {
 		entity.setPrice(dto.price());
 		entity.setImgUrl(dto.imgUrl());
 	}
-	
+
 }

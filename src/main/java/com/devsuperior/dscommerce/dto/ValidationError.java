@@ -1,4 +1,4 @@
-package com.devsuperior.dscomerce.dto;
+package com.devsuperior.dscommerce.dto;
 
 import java.time.Instant;
 import java.util.ArrayList;

@@ -1,24 +1,18 @@
-package com.devsuperior.dscomerce.entities;
+package com.devsuperior.dscommerce.entities;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "tb_user")
-public class User implements Serializable{
+public class User implements UserDetails {
 
-	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -28,11 +22,15 @@ public class User implements Serializable{
 	private String phone;
 	private LocalDate birthDate;
 	private String password;
-	private String[] roles;
+
+	@ManyToMany
+	@JoinTable(name = "tb_user_role",
+			joinColumns = @JoinColumn(name = "user_id"),
+			inverseJoinColumns = @JoinColumn(name="role_id")
+	)
+	private Set<Role> roles = new HashSet<>();
 	@OneToMany(mappedBy = "client")
 	private Set<Order> orders = new HashSet<>();
-
-
 
 	public User() {
 	}
@@ -85,16 +83,22 @@ public class User implements Serializable{
 		this.birthDate = birthDate;
 	}
 
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return roles;
+	}
+
 	public String getPassword() {
 		return password;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	@Override
+	public String getUsername() {
+		return email;
 	}
 
-	public String[] getRoles() {
-		return roles;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public void setOrders(Set<Order> orders) {

@@ -1,4 +1,4 @@
-package com.devsuperior.dscomerce.entities;
+package com.devsuperior.dscommerce.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import com.devsuperior.dscomerce.enums.OrderStatus;
+import com.devsuperior.dscommerce.enums.OrderStatus;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
