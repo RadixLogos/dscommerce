@@ -101,6 +101,9 @@ public class User implements UserDetails {
 		this.password = password;
 	}
 
+	public void addRole(Role role){
+		roles.add(role);
+	}
 	public void setOrders(Set<Order> orders) {
 		this.orders = orders;
 	}
