@@ -17,7 +17,6 @@ public class UserService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         List<UserDetailsProjection> response = userRepository.getUserByEmailWithRole(username);
@@ -31,6 +30,7 @@ public class UserService implements UserDetailsService {
             Role role = new Role(u.getRoleId(),u.getAuthority());
             user.addRole(role);
         });
+        user.getAuthorities().forEach(r ->{  System.out.println(r.getAuthority());});
         return user;
     }
 }

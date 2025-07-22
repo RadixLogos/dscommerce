@@ -23,7 +23,12 @@ public class ProductService {
 	@Autowired
 	private ProductRepository productRepository;
 
-	
+	@Transactional(readOnly = true)
+	public Page<ProductDTO> findAllProducts(Pageable pageable){
+		Page<Product> products = productRepository.findAll(pageable);
+		return products.map(ProductDTO::fromProduct);
+	}
+
 	@Transactional(readOnly = true)
 	public ProductDTO findProductById(Long id) {
 		var dto =ProductDTO.fromProduct(productRepository.findById(id)

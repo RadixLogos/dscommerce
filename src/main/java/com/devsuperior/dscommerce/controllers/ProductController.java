@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -22,19 +23,28 @@ public class ProductController {
 	@Autowired
 	ProductService productService;
 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_OPERATOR')")
 	@GetMapping("/{id}")
 	public ResponseEntity<ProductDTO> getProduct(@PathVariable Long id) {
 		ProductDTO response = productService.findProductById(id);
 		return ResponseEntity.ok(response);
 	}
 
-	@GetMapping
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_OPERATOR')")
+	@GetMapping("/search")
 	public ResponseEntity<Page<ProductDTO>> findProductByName(
 			@RequestParam(value = "name") String name, Pageable pageable){
 		Page<ProductDTO> response = productService.findProductByName(name, pageable);
 		return ResponseEntity.ok(response);
 	}
 
+	@GetMapping
+	public ResponseEntity<Page<ProductDTO>> findAllProducts(Pageable pageable){
+		var response = productService.findAllProducts(pageable);
+		return ResponseEntity.ok(response);
+	}
+
+	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping
 	public ResponseEntity<ProductDTO> insertProduct(@Valid @RequestBody ProductDTO dto) {
 		dto = productService.insertProduct(dto); 
@@ -44,13 +54,15 @@ public class ProductController {
 				.buildAndExpand(dto.id()).toUri();
 		return ResponseEntity.created(uri).body(dto);
 	}
-	
+
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PutMapping("/{id}")
 	public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long id, @Valid @RequestBody ProductDTO dto){
 		var response = productService.updateProduct(id, dto);
 		return ResponseEntity.ok(response);
 	}
-	
+
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteProduct(@PathVariable Long id){
 		productService.deleteProduct(id);
