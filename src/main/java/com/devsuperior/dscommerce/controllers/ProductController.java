@@ -23,14 +23,13 @@ public class ProductController {
 	@Autowired
 	ProductService productService;
 
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_OPERATOR')")
 	@GetMapping("/{id}")
 	public ResponseEntity<ProductDTO> getProduct(@PathVariable Long id) {
 		ProductDTO response = productService.findProductById(id);
 		return ResponseEntity.ok(response);
 	}
 
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_OPERATOR')")
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_CLIENT')")
 	@GetMapping("/search")
 	public ResponseEntity<Page<ProductDTO>> findProductByName(
 			@RequestParam(value = "name") String name, Pageable pageable){
