@@ -25,25 +25,4 @@ public record ProductDTO(
 				p.getImgUrl());
 	}
 
-	public Long id() {
-		return id;
-	}
-
-	public String name() {
-		return name;
-	}
-
-	public String description() {
-		return description;
-	}
-
-	public Double price() {
-		return price;
-	}
-
-	public String imgUrl() {
-		return imgUrl;
-	}
-	
-	
 }

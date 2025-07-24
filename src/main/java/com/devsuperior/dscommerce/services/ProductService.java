@@ -1,5 +1,6 @@
 package com.devsuperior.dscommerce.services;
 
+import com.devsuperior.dscommerce.dto.ProductMinDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -24,9 +25,9 @@ public class ProductService {
 	private ProductRepository productRepository;
 
 	@Transactional(readOnly = true)
-	public Page<ProductDTO> findAllProducts(Pageable pageable){
-		Page<Product> products = productRepository.findAll(pageable);
-		return products.map(ProductDTO::fromProduct);
+	public Page<ProductMinDTO> findAllProducts(Pageable pageable, String name){
+		Page<Product> products = productRepository.findByName(name,pageable);
+		return products.map(ProductMinDTO::fromProduct);
 	}
 
 	@Transactional(readOnly = true)
@@ -36,11 +37,6 @@ public class ProductService {
 		return dto;
 	}
 
-	@Transactional(readOnly = true)
-	public Page<ProductDTO> findProductByName(String name, Pageable pageable) {
-		return productRepository.findByName(name,pageable).map(ProductDTO::fromProduct);
-	}
-	
 	@Transactional
 	public ProductDTO insertProduct(ProductDTO dto) {
 		var entity = new Product();
