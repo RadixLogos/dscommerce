@@ -1,6 +1,7 @@
 package com.devsuperior.dscommerce.services;
 
 import com.devsuperior.dscommerce.dto.ProductMinDTO;
+import com.devsuperior.dscommerce.entities.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -75,6 +76,12 @@ public class ProductService {
 		entity.setDescription(dto.description());
 		entity.setPrice(dto.price());
 		entity.setImgUrl(dto.imgUrl());
+		entity.getCategories().clear();
+		dto.categories().forEach(catDto ->{
+			var category = new Category();
+			category.setId(catDto.id());
+			entity.getCategories().add(category);
+		});
 	}
 
 }
