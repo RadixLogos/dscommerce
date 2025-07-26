@@ -23,8 +23,8 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tb_order")
-public class Order implements Serializable{
-	private static final long serialVersionUID = 1L;
+public class Order{
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -92,6 +92,9 @@ public class Order implements Serializable{
 		return items;
 	}
 
+	public void addItem(OrderItem orderItem){
+		items.add(orderItem);
+	}
 	public List<Product> getProducts(){
 		return items.stream().map(p -> p.getProduct()).toList();
 	}
