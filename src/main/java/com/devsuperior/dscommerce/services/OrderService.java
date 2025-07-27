@@ -41,13 +41,15 @@ public class OrderService {
     @Transactional
     public OrderDTO insertOrder(OrderDTO orderDTO){
         Order orderEntity = new Order();
-        OrderItem orderItem = new OrderItem();
-        fromDtoToEntity(orderDTO, orderEntity, orderItem);
+        fromDtoToEntity(orderDTO, orderEntity);
         orderEntity = orderRepository.save(orderEntity);
+        orderEntity.getItems().forEach(item ->{
+            orderItemRepository.save(item);
+        });
         return OrderDTO.fromOrder(orderEntity);
     }
 
-    private void fromDtoToEntity(OrderDTO orderDTO, Order orderEntity, OrderItem orderItem) {
+    private void fromDtoToEntity(OrderDTO orderDTO, Order orderEntity) {
         orderEntity.setId(orderDTO.id());
         orderEntity.setMoment(Instant.now());
         orderEntity.setStatus(OrderStatus.WAITING_PAYMENT);
@@ -61,20 +63,14 @@ public class OrderService {
             payment.setMoment(orderDTO.moment());
             orderEntity.setPayment(payment);
         }
-        List<Product> productList = productRepository.findAll();
         for(OrderItemDTO item : orderDTO.items()){
-            productList.forEach(p -> {
-                System.out.println("PRODUCT NAME -> " + p.getName());
-                if(p.getId() == item.productId()){
-                    System.out.println("ORDER PRODUCT NAME -> " + p.getName());
-                    orderItem.setProduct(p);
-                    orderItem.setPrice(p.getPrice());
-                    orderItem.setQuantity(item.quantity());
-                    orderItem.setOrder(orderEntity);
-                    orderEntity.addItem(orderItem);
-                }
-            });
-
+            var orderItem = new OrderItem();
+            var product = productRepository.getReferenceById(item.productId());
+            orderItem.setProduct(product);
+            orderItem.setPrice(product.getPrice());
+            orderItem.setQuantity(item.quantity());
+            orderItem.setOrder(orderEntity);
+            orderEntity.addItem(orderItem);
         }
     }
 }
