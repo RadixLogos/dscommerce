@@ -31,6 +31,8 @@ public class OrderService {
     private OrderItemRepository orderItemRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserService userService;
 
     @Transactional(readOnly = true)
     public OrderDTO findOrderById(Long id){
@@ -41,36 +43,21 @@ public class OrderService {
     @Transactional
     public OrderDTO insertOrder(OrderDTO orderDTO){
         Order orderEntity = new Order();
-        fromDtoToEntity(orderDTO, orderEntity);
-        orderEntity = orderRepository.save(orderEntity);
-        orderEntity.getItems().forEach(item ->{
-            orderItemRepository.save(item);
-        });
-        return OrderDTO.fromOrder(orderEntity);
-    }
-
-    private void fromDtoToEntity(OrderDTO orderDTO, Order orderEntity) {
-        orderEntity.setId(orderDTO.id());
         orderEntity.setMoment(Instant.now());
         orderEntity.setStatus(OrderStatus.WAITING_PAYMENT);
 
-        User client = userRepository.getReferenceById(orderDTO.client().id());
+        User client = userService.authenticated();
         orderEntity.setUser(client);
 
-        if(orderDTO.payment() != null) {
-            var payment = new Payment();
-            payment.setId(orderDTO.payment().id());
-            payment.setMoment(orderDTO.moment());
-            orderEntity.setPayment(payment);
-        }
         for(OrderItemDTO item : orderDTO.items()){
-            var orderItem = new OrderItem();
             var product = productRepository.getReferenceById(item.productId());
-            orderItem.setProduct(product);
-            orderItem.setPrice(product.getPrice());
-            orderItem.setQuantity(item.quantity());
-            orderItem.setOrder(orderEntity);
+            var orderItem = new OrderItem(orderEntity,product,item.quantity(),product.getPrice());
             orderEntity.addItem(orderItem);
         }
+
+        orderEntity = orderRepository.save(orderEntity);
+        orderItemRepository.saveAll(orderEntity.getItems());
+        return OrderDTO.fromOrder(orderEntity);
     }
+
 }

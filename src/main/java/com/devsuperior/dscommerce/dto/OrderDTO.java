@@ -2,6 +2,7 @@ package com.devsuperior.dscommerce.dto;
 
 import com.devsuperior.dscommerce.entities.Order;
 import com.devsuperior.dscommerce.enums.OrderStatus;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -14,6 +15,7 @@ public record OrderDTO(
         OrderStatus status,
         ClientDTO client,
         PaymentDTO payment,
+        @NotEmpty(message = "O pedido deve conter ao menos um item")
         List<OrderItemDTO> items
 ) {
     public static OrderDTO fromOrder(Order order){

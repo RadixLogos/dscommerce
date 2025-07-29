@@ -2,6 +2,7 @@ package com.devsuperior.dscommerce.controllers;
 
 import com.devsuperior.dscommerce.dto.OrderDTO;
 import com.devsuperior.dscommerce.services.OrderService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,7 +27,7 @@ public class OrderController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_CLIENT')")
-    public ResponseEntity<OrderDTO> insertOrder(@RequestBody OrderDTO order){
+    public ResponseEntity<OrderDTO> insertOrder(@Valid @RequestBody OrderDTO order){
         order = orderService.insertOrder(order);
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
