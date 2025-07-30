@@ -51,7 +51,7 @@ public class OrderService {
 
         for(OrderItemDTO item : orderDTO.items()){
             var product = productRepository.getReferenceById(item.productId());
-            var orderItem = new OrderItem(orderEntity,product,item.quantity(),product.getPrice());
+            var orderItem = new OrderItem(orderEntity,product,item.quantity(),product.getPrice(),product.getImgUrl());
             orderEntity.addItem(orderItem);
         }
 

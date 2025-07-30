@@ -16,15 +16,16 @@ public class OrderItem implements Serializable{
 	private OrderItemPk id = new OrderItemPk();
 	private Integer quantity;
 	private Double price;
-
+	private String imgUrl;
 	public OrderItem() {
 	}
 
-	public OrderItem(Order order, Product product, Integer quantity, Double price) {
+	public OrderItem(Order order, Product product, Integer quantity, Double price, String imgUrl) {
 		id.setOrder(order);
 		id.setProduct(product);
 		this.quantity = quantity;
 		this.price = price;
+		this.imgUrl = imgUrl;
 	}
 
 	public OrderItemPk getId() {
@@ -65,6 +66,12 @@ public class OrderItem implements Serializable{
 	
 	public void setProduct(Product product) {
 		id.setProduct(product);
+	}
+	public String getImgUrl(){
+		return imgUrl;
+	}
+	public void setImgUrl(String imgUrl){
+		this.imgUrl = imgUrl;
 	}
 	@Override
 	public int hashCode() {
