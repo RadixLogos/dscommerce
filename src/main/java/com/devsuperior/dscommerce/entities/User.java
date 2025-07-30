@@ -104,8 +104,14 @@ public class User implements UserDetails {
 	public void addRole(Role role){
 		roles.add(role);
 	}
-	public void setOrders(Set<Order> orders) {
-		this.orders = orders;
+
+	public boolean hasRole(String role){
+		for(Role r : roles ){
+			if(r.getAuthority().equals(role)){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
