@@ -1,10 +1,7 @@
 package com.devsuperior.dscommerce.dto;
 
 import com.devsuperior.dscommerce.entities.Product;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +14,7 @@ public record ProductDTO(
 		@NotBlank(message = "Recurso obrigatório")
 		@Size(min = 10, message = "Descrição deve ter no mínimo 10 caracteres")
 		String description,
+		@NotNull(message = "Recurso obrigatório")
 		@Positive(message = "O preço deve ser um número positivo")
 		Double price,
 		String imgUrl,
