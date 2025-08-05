@@ -33,7 +33,7 @@ O projeto contempla as seguintes funcionalidades por end-points:
 * Deletar produtos
 
 # Como testar o projeto
-Para testar a API é necessário ter instalado no computador o Java SDK e uma aplicação de testes de requisição, dou como sugestão o Postman desktop.
+Para testar a API é necessário ter instalado no computador o Java 21 e uma aplicação de testes de requisição, dou como sugestão o Postman desktop.
 Faça um clone do projeto utilizando:
 ```bash
   git clone git@github.com:RadixLogos/dscommerce.git
