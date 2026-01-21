@@ -20,8 +20,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 public class UserServiceTests {
@@ -84,4 +83,21 @@ public class UserServiceTests {
 
         });
    }
+    @Test
+    public void getMeShouldReturnUserDTOWhenUserAuthenticated(){
+        UserService userServiceSpy = spy(userService);
+        doReturn(user).when(userServiceSpy).authenticated();
+        var response = userServiceSpy.getMe();
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(user.getId(),response.id());
+        Assertions.assertEquals(user.getName(),response.name());
+        Assertions.assertEquals(user.getUsername(),response.email());
+        Assertions.assertEquals(user.getPhone(),response.phone());
+    }
+    @Test
+    public void getMeShouldThrowUsernameNotFoundExceptionWhenNotAuthenticatedUser(){
+        UserService userServiceSpy = spy(userService);
+        when(userServiceSpy.authenticated()).thenThrow(UsernameNotFoundException.class);
+        Assertions.assertThrows(UsernameNotFoundException.class, userServiceSpy::getMe);
+    }
 }

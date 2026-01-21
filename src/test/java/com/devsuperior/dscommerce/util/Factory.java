@@ -45,6 +45,20 @@ public class Factory {
         user.addRole(new Role(1L,"ROLE_CLIENT"));
         return user;
     }
+    public static User buildUserAdmin(){
+        var user = new User("pedro","pedro@gmail.com","419786546", LocalDate.of(1999, Month.APRIL,15),"1889654");
+        user.setId(3L);
+        user.addRole(new Role(1L,"ROLE_ADMIN"));
+        return user;
+    }
+    public static User buildUserCustomUserClient(String name){
+        var user = new User(name,name+"@gmail.com","4190386546", LocalDate.of(1999, Month.APRIL,15),"647890866");
+        user.setId(3L);
+        user.addRole(new Role(1L,"ROLE_CLIENT"));
+        return user;
+    }
+
+
     public static UserDetailsProjection buildUserDetailsProjection(String username) {
         return new UserDetailsProjection() {
             @Override
