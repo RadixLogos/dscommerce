@@ -1,13 +1,14 @@
 package com.devsuperior.dscommerce.util;
 
 import com.devsuperior.dscommerce.dto.CategoryDTO;
+import com.devsuperior.dscommerce.dto.OrderDTO;
+import com.devsuperior.dscommerce.dto.OrderItemDTO;
 import com.devsuperior.dscommerce.dto.ProductDTO;
-import com.devsuperior.dscommerce.entities.Category;
-import com.devsuperior.dscommerce.entities.Product;
-import com.devsuperior.dscommerce.entities.Role;
-import com.devsuperior.dscommerce.entities.User;
+import com.devsuperior.dscommerce.entities.*;
+import com.devsuperior.dscommerce.enums.OrderStatus;
 import com.devsuperior.dscommerce.projections.UserDetailsProjection;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
@@ -48,12 +49,12 @@ public class Factory {
     public static User buildUserAdmin(){
         var user = new User("pedro","pedro@gmail.com","419786546", LocalDate.of(1999, Month.APRIL,15),"1889654");
         user.setId(3L);
-        user.addRole(new Role(1L,"ROLE_ADMIN"));
+        user.addRole(new Role(2L,"ROLE_ADMIN"));
         return user;
     }
     public static User buildUserCustomUserClient(String name){
         var user = new User(name,name+"@gmail.com","4190386546", LocalDate.of(1999, Month.APRIL,15),"647890866");
-        user.setId(3L);
+        user.setId(4L);
         user.addRole(new Role(1L,"ROLE_CLIENT"));
         return user;
     }
@@ -81,7 +82,31 @@ public class Factory {
                 return "ROLE_CLIENT";
             }
         };
+    }
 
+    public static OrderItemDTO buildOrderItemDTO(){
+        return new OrderItemDTO(1L,null,25.50,5,null);
+    }
+    public static Order buildOrder(){
+        var order = new Order(Instant.now(), OrderStatus.PAID);
+        var orderItem = new OrderItem(order,buildProduct(),2,25.5,"https://image.com");
+        order.setId(1L);
+        order.setUser(buildUserClient());
+        order.addItem(orderItem);
+        return order;
+    }
+
+    public static Order buildWatingPaymentOrder(){
+        var order = new Order(Instant.now(), OrderStatus.WAITING_PAYMENT);
+        var orderItem = new OrderItem(order,buildProduct(),2,25.5,"https://image.com");
+        order.setId(2L);
+        order.setUser(buildUserClient());
+        order.addItem(orderItem);
+        return order;
+    }
+
+    public static OrderDTO buildNewOrderDTO(){
+        return new OrderDTO(null,null,null,null,null,List.of(buildOrderItemDTO()));
     }
 
 }
