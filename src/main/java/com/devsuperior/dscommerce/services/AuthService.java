@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class AuthService {
     @Autowired
     UserService userService;
-    public void hasRoleAdminOrIsAuthorizedUser(long userId){
+    public void hasRoleAdminOrIsAuthorizedUser(Long userId){
         User currentUser = userService.authenticated();
         if(!currentUser.hasRole("ROLE_ADMIN") && !currentUser.getId().equals(userId)){
             throw new ForbiddenException("Access denied");
