@@ -35,6 +35,7 @@ public class ProductControllerIT {
 
     private String productName;
     private String adminToken;
+    private String clientToken;
     private ProductDTO validProduct;
     @BeforeEach
     void setUp()throws Exception{
@@ -42,6 +43,7 @@ public class ProductControllerIT {
         validProduct = Factory.buildNullIdProductDTO();
 
         adminToken = tokenUtil.getAccessToken(mockMvc,"alex@gmail.com","123456");
+        clientToken = tokenUtil.getAccessToken(mockMvc,"maria@gmail.com","123456");
     }
 
     @Test
@@ -134,6 +136,28 @@ public class ProductControllerIT {
                 .andExpect(jsonPath("$.error").value("Dados inválidos"))
                 .andExpect(jsonPath("$.errors[0].message").value("O produto deve ter ao menos uma categoria"))
                 .andExpect(jsonPath("$.errors[0].field").value("categories"));
+
+    }
+    @Test
+    public void insertProductShouldReturnStatus403WhenClientUser() throws Exception{
+        String jsonBody = objectMapper.writeValueAsString(validProduct);
+        mockMvc.perform(post("/products")
+                        .header("Authorization","Bearer " + clientToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonBody)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+
+    }
+
+    @Test
+    public void insertProductShouldReturnStatus401WhenNotAdminOrClient() throws Exception{
+        String jsonBody = objectMapper.writeValueAsString(validProduct);
+        mockMvc.perform(post("/products")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonBody)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());
 
     }
 }
