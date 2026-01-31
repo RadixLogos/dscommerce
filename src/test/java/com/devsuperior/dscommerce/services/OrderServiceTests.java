@@ -10,6 +10,7 @@ import com.devsuperior.dscommerce.repositories.ProductRepository;
 import com.devsuperior.dscommerce.services.exceptions.ForbiddenException;
 import com.devsuperior.dscommerce.services.exceptions.ResourceNotFoundException;
 import com.devsuperior.dscommerce.util.Factory;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,6 +19,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,6 +48,7 @@ public class OrderServiceTests {
     private Long existingOrderId;
     private Long unexistingOrderId;
     private Long existingProductId;
+    private Long unexistingProductId;
     private Product product;
     private OrderDTO orderDTO;
     private  Order newOrder;
@@ -63,11 +66,14 @@ public class OrderServiceTests {
         existingOrderId =1L;
         unexistingOrderId = 200L;
         existingProductId = 1L;
+        unexistingProductId = 299L;
         when(orderRepository.findById(existingOrderId)).thenReturn(Optional.of(order));
         when(orderRepository.findById(unexistingOrderId)).thenReturn(Optional.empty()).thenThrow(ResourceNotFoundException.class);
         doReturn(authorizedUser).when(userService).authenticated();
         when(productRepository.getReferenceById(existingProductId)).thenReturn(product);
+        when(productRepository.getReferenceById(unexistingProductId)).thenThrow(EntityNotFoundException.class);
         when(orderRepository.save(any())).thenReturn(newOrder);
+        when(orderItemRepository.saveAll(any())).thenReturn(new ArrayList<>(newOrder.getItems()));
     }
 
     @Test

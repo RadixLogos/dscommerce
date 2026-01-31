@@ -3,7 +3,6 @@ package com.devsuperior.dscommerce.controllers;
 import com.devsuperior.dscommerce.controllers.util.TokenUtil;
 import com.devsuperior.dscommerce.dto.CategoryDTO;
 import com.devsuperior.dscommerce.dto.ProductDTO;
-import com.devsuperior.dscommerce.services.ProductService;
 import com.devsuperior.dscommerce.util.Factory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,9 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -33,15 +32,16 @@ public class ProductControllerIT {
     @Autowired
     private TokenUtil tokenUtil;
 
-    private String productName;
-    private String adminToken;
-    private String clientToken;
+    private String productName,adminToken,clientToken;
     private ProductDTO validProduct;
+    private Long nonDependingProductId,unexistingProductId,dependingProductId;
     @BeforeEach
     void setUp()throws Exception{
         productName = "Macbook";
         validProduct = Factory.buildNullIdProductDTO();
-
+        nonDependingProductId = 2L;
+        dependingProductId = 1L;
+        unexistingProductId = 200L;
         adminToken = tokenUtil.getAccessToken(mockMvc,"alex@gmail.com","123456");
         clientToken = tokenUtil.getAccessToken(mockMvc,"maria@gmail.com","123456");
     }
@@ -159,5 +159,45 @@ public class ProductControllerIT {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
 
+    }
+    @Test
+    public void deleteShouldReturnNoContentWhenNoDependingProductIdAndUserAdmin()throws Exception{
+        mockMvc.perform(delete("/products/" + nonDependingProductId)
+                .header("Authorization","Bearer " + adminToken)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+    }
+    @Test
+    public void deleteShouldReturnNotFoundWhenUnexistingProductIdAndUserAdmin() throws Exception {
+        mockMvc.perform(delete("/products/" + unexistingProductId)
+                .header("Authorization","Bearer " + adminToken)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public void deleteShouldReturnBadRequestWhenDependingProductIdAndUserAdmin() throws Exception {
+        mockMvc.perform(delete("/products/{id}", dependingProductId)
+                .header("Authorization","Bearer " + adminToken)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void deleteShouldReturnForbiddenWhenUserClient() throws Exception {
+        mockMvc.perform(delete("/products/" + nonDependingProductId)
+                        .header("Authorization","Bearer " + clientToken)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+
+    @Test
+    public void deleteShouldReturnUnauthorizedWhenInvalidToken() throws Exception {
+        mockMvc.perform(delete("/products/" + nonDependingProductId)
+                        .header("Authorization","Bearer " + clientToken + "s")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());
     }
 }

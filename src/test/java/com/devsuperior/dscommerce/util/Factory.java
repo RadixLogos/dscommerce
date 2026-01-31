@@ -4,13 +4,7 @@ import com.devsuperior.dscommerce.dto.CategoryDTO;
 import com.devsuperior.dscommerce.dto.OrderDTO;
 import com.devsuperior.dscommerce.dto.OrderItemDTO;
 import com.devsuperior.dscommerce.dto.ProductDTO;
-import com.devsuperior.dscommerce.dto.ProductMinDTO;
-import com.devsuperior.dscommerce.entities.Category;
-import com.devsuperior.dscommerce.entities.Product;
-import com.devsuperior.dscommerce.entities.Role;
-import com.devsuperior.dscommerce.entities.User;
-import com.devsuperior.dscommerce.entities.Order;
-import com.devsuperior.dscommerce.entities.OrderItem;
+import com.devsuperior.dscommerce.entities.*;
 import com.devsuperior.dscommerce.enums.OrderStatus;
 import com.devsuperior.dscommerce.projections.UserDetailsProjection;
 
@@ -42,8 +36,8 @@ public class Factory {
         return ProductDTO.fromProduct(buildNewProduct());
     }
 
-    public static ProductMinDTO buildProductMinDTO(){
-        return new ProductMinDTO(3L,"Macbook",1250.0,"https://raw.githubusercontent.com/devsuperior/dscatalog-resources/master/backend/img/3-big.jpg");
+    public static ProductDTO buildUpdateProductDTO(){
+        return new ProductDTO(null,"Head First Java 2 edição","Livro sobre Java melhorado",150.0,"https://hadfrist-java-jpg.com", List.of(CategoryDTO.fromCategory(buildCategory())));
     }
     public static ProductDTO buildNullIdProductDTO(){
         return new ProductDTO(null,"Head First Java 2 edição","Livro sobre Java melhorado",150.0,"https://hadfrist-java-jpg.com", List.of(CategoryDTO.fromCategory(buildCategory())));
