@@ -31,7 +31,6 @@ public class ProductControllerIT {
     private ObjectMapper objectMapper;
     @Autowired
     private TokenUtil tokenUtil;
-
     private String productName,adminToken,clientToken;
     private ProductDTO validProduct;
     private Long nonDependingProductId,unexistingProductId,dependingProductId;
@@ -158,7 +157,6 @@ public class ProductControllerIT {
                         .content(jsonBody)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
-
     }
     @Test
     public void deleteShouldReturnNoContentWhenNoDependingProductIdAndUserAdmin()throws Exception{
